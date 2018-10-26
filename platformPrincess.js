@@ -121,15 +121,82 @@ class Spider extends Sprite {
         this.setImage("spider.png");
         this.x = x;
         this.y = y;
-        this.speed = 0;
+        this.speed = 48;
         this.accelerateOnBounce = false;
         this.defineAnimation("creep", 0, 2);
         this.playAnimation("creep", true);
     }
-  
-    handleGameLoop(){
-        
+
+    handleGameLoop() {
+        if (Spider > ann) {
+            this.angle = 270;
+            this.accelerateOnBounce = false;
+        }
+        if (Spider < ann) {
+            this.angle = 90;
+            this.accelerateOnBounce = false;
+        }
+        return false;
+    }
+    handleCollision(otherSprite) {
+        // Spiders only care about collisons with Ann.
+        if (otherSprite === ann) {
+            // Spiders must hit Ann on top of her head.
+            let horizontalOffset = this.x - otherSprite.x;
+            let verticalOffset = this.y - otherSprite.y;
+            if (Math.abs(horizontalOffset) < this.width / 2 &&
+                Math.abs(verticalOffset) < 30) {
+                otherSprite.y = otherSprite.y + 1; // knock Ann off platform
+            }
+        }
+        return false;
     }
 }
 new Spider(200, 225);
 new Spider(550, 200);
+
+class Bat extends Sprite {
+    constructor(x, y, name) {
+        super();
+        this.setImage("bat.png");
+        this.name = "A scary bat";
+        this.defineAnimation("flap", 0, 1);
+        this.playAnimation("flap", true);
+        this.x = x;
+        this.y = y;
+        this.attackSpeed = 300;
+        this.normalSpeed = 20;
+        this.angle = 45 - Math.round(Math.random() * 3) * 90;
+        this.angleTimer = 0;
+        this.startX = x;
+        this.startY = y;
+    }
+    attack() {
+        this.attackSpeed = 300;
+        this.aimFor(ann.x, ann.y);
+    }
+    handleCollision(otherSprite) {
+        if (otherSprite === ann) {
+            let horizontalOffset = this.x - otherSprite.x;
+            let verticalOffset = this.y - otherSprite.y;
+            if (Math.abs(horizontalOffset) < this.width / 2 &&
+                Math.abs(verticalOffset) < 30) {
+                otherSprite.y = otherSprite.y + 1; // knock Ann off platform
+            }
+        }
+        return false;
+    }
+    handleGameLoop(){
+        if(Math.random() < 0.01){
+            Bat.attack();
+        }//if bat is not attacking : hover
+        if(this.normalSpeed){
+            this.x = this.x;
+            this.y = this.y;
+            this.speed = this.normalSpeed;
+            this.angle = 225;
+        }
+    }
+}
+new Bat(200, 100, "leftBat");
+new Bat(500, 75, "rightBat");
