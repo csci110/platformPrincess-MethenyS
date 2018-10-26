@@ -186,6 +186,16 @@ class Bat extends Sprite {
         }
         return false;
     }
+    handleBoundaryContact(){
+        if (this.y < 0){
+            this.y === 0;
+        }
+        if (this.y > game.displayHeight){
+            this.y = this.startY;
+            this.speed = this.normalSpeed;
+            this.agnle = 225;
+        }
+    }
     handleGameLoop() {
         if (Math.random() < 0.01) {
             this.attack();
