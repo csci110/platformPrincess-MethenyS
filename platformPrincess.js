@@ -136,7 +136,7 @@ class Spider extends Sprite {
             this.angle = 90;
             this.accelerateOnBounce = false;
         }
-        return false;
+
     }
     handleCollision(otherSprite) {
         // Spiders only care about collisons with Ann.
@@ -162,19 +162,19 @@ class Bat extends Sprite {
         this.name = "A scary bat";
         this.defineAnimation("flap", 0, 1);
         this.playAnimation("flap", true);
-        this.x = x;
-        this.y = y;
+        this.x = this.startX = x;
+        this.y = this.startY = y;
         this.attackSpeed = 300;
         this.normalSpeed = 20;
         this.angle = 45 - Math.round(Math.random() * 3) * 90;
         this.angleTimer = 0;
-        this.startX = x;
-        this.startY = y;
+        this.accelerateOnBounce = false;
     }
     attack() {
         this.attackSpeed = 300;
         this.aimFor(ann.x, ann.y);
     }
+
     handleCollision(otherSprite) {
         if (otherSprite === ann) {
             let horizontalOffset = this.x - otherSprite.x;
@@ -186,17 +186,19 @@ class Bat extends Sprite {
         }
         return false;
     }
-    handleGameLoop(){
-        if(Math.random() < 0.01){
-            Bat.attack();
-        }//if bat is not attacking : hover
-        if(this.normalSpeed){
-            this.x = this.x;
-            this.y = this.y;
+    handleGameLoop() {
+        if (Math.random() < 0.01) {
+            this.attack();
+        } //if bat is not attacking : hover
+        if (this.normalSpeed) {
+            this.angle = 45 + Math.round(Math.random() * 5) * 90;
+            this.angle = 45 + Math.round(Math.random() * 5) * 180;
             this.speed = this.normalSpeed;
-            this.angle = 225;
+
         }
     }
 }
-new Bat(200, 100, "leftBat");
 new Bat(500, 75, "rightBat");
+let leftBat = new Bat();
+leftBat.x = 200;
+leftBat.y = 100;
