@@ -128,13 +128,13 @@ class Spider extends Sprite {
     }
 
     handleGameLoop() {
-        if (Spider > ann) {
-            this.angle = 270;
-            this.accelerateOnBounce = false;
-        }
-        if (Spider < ann) {
+        if (this.y > ann.y) {
             this.angle = 90;
-            this.accelerateOnBounce = false;
+
+        }
+        if (this.y < ann.y - 48) {
+            this.angle = 270;
+
         }
 
     }
@@ -186,11 +186,11 @@ class Bat extends Sprite {
         }
         return false;
     }
-    handleBoundaryContact(){
-        if (this.y < 0){
+    handleBoundaryContact() {
+        if (this.y < 0) {
             this.y === 0;
         }
-        if (this.y > game.displayHeight){
+        if (this.y > game.displayHeight) {
             this.y = this.startY;
             this.speed = this.normalSpeed;
             this.agnle = 225;
@@ -200,9 +200,9 @@ class Bat extends Sprite {
         if (Math.random() < 0.01) {
             this.attack();
         } //if bat is not attacking : hover
-        if (this.normalSpeed) {
-            this.angle = 45 + Math.round(Math.random() * 5) * 90;
-            this.angle = 45 + Math.round(Math.random() * 5) * 180;
+        if (Math.round(this.normalSpeed)) {
+            this.angleTimer = 45 + Math.round(Math.random() * 5) * 90;
+            this.angleTimer = 45 + Math.round(Math.random() * 5) * 180;
             this.speed = this.normalSpeed;
 
         }
